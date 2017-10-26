@@ -1,0 +1,21 @@
+version: '3'
+services:
+  server:
+    build: ./server/build/docker
+    ports:
+     - "8080:8080"
+    depends_on:
+     - "mongo-db"
+    links:
+     - "mongo-db"
+  mongo-db:
+    image: "mongo:latest"
+  dash-button-server:
+    image: "node:8"
+    user: "node"
+    working_dir: /home/node/app
+    volumes:
+      - ./dash-button-server/src:/home/node/app
+    expose:
+      - "8081"
+    command: bash -c "su apt-get install libpcap-dev && npm install && npm start"

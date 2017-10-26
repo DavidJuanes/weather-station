@@ -64,13 +64,9 @@ task startDBContainer(type: DockerStartContainer) {
 }
 
 task createMyAppContainer(type: DockerCreateContainer) {
-    dependsOn dockerBuildImage, startDBContainer
+    dependsOn dockerBuildImage
     targetImageId { dockerBuildImage.getImageId() }
     portBindings = ['8080:8080']
-
-    doFirst{ // doFirst required!
-        links = [ "${startDBContainer.getContainerId()}:database" ] // `database` there will be host used by application to DB connect
-    }
 }
 
 task startMyAppContainer(type: DockerStartContainer) {
